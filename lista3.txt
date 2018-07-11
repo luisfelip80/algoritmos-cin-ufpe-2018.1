@@ -1,0 +1,64 @@
+A Empresa Manga Sistemas está em processo de desenvolvimento de um novo sistema de banco de dados, chamado MangaDB. Nesse BD, as entidades são chamadas documentos e os documentos do mesmo tipo são organizados em coleções. Cada documento possui um identificador único (ID) obrigatório dentro da coleção, que é usado para referenciá-lo. Além do ID, cada documento contém um conjuto de zero ou mais atributos. Alguns desses atributos são únicos dentre todos os objetos da coleção, ou seja, não pode haver mais de um documento com o mesmo valor. Por exemplo: uma coleção de pessoas não poderia permitir que dois documentos diferente tivessem o mesmo CPF. Para acelerar as consultas no BD, alguns atributos são indexados, de forma que é possível buscar por documentos dado o valor desse atributo. O ID e os atributos únicos são sempre indexados.
+
+A empresa decidiu utilizar árvores de busca binária para implementar o BD. Para cada atributo indexado, o MangaDB mantém uma BST na qual cada nó contém uma referência para um documento, e usa uma chave de comparação que é o valor do atributo indexado do documento.
+
+O banco de dados suporta as seguintes operações:
+
+INSERT N attr1 val1 attr2 val2 … attrN valN: insere o documento na coleção com o valor do atributo attrN sendo valN. O identificador único sempre será um dos N atributos informados, quaisquer atributos ausentes devem ser considerados indefinidos, não podendo o documento ser indexado por tal atributo. O atributo ID sempre é iniciado por um caractere '*', os atributos únicos são sempre iniciados por "!", e os atributos indexados são sempre iniciados por '?'.
+DELETE attr val: remove o documento cujo atributo attr for val, este atributo é obrigatóriamente o ID ou outro atributo único.
+SELECT N attr1 attr2 … attrN WHERE attr val: recupera o valor dos N atributos attr1, attr2, …, attrN de cada documento cujo valor do atributo attr é val.
+Exemplo
+----------------------------------------------------------
+| *problemId | !problemName | ?timeLimit | acceptedCount |
+----------------------------------------------------------
+| p1         | Somar        | 1          | 9876          |
+----------------------------------------------------------
+| p2         | Subtrair     | 1          | 7654          |
+----------------------------------------------------------
+| p3         | Multiplicar  | 32         | 5432          |
+----------------------------------------------------------
+Considere a coleção acima. Nela há 4 atributos: *problemId (o ID), !problemName (seus valores são únicos entre os documentos), ?timeLimit (seus valores são indexados, e assim podem ter uma busca mais eficiente), acceptedCount (seus valores não possuem nenhuma propriedade especial). Atualmente há 3 documentos na coleção, identificados unicamente por p1, p2, e p3.
+
+Para adicionar um novo documento à coleção, pode-se usar por exemplo a operação
+
+INSERT 4 *problemId p4 !problemName Dividir ?timeLimit 32 acceptedCount 3210
+A inserção deve levar em conta os atributos especiais do documento. Primeiramente cria-se o objeto documento com todos os atributos e valores nele contido. Em seguida a referência a esse objeto é inserida na na BST de cada atributo indexado.
+
+Para buscar qual o ID e o acceptedCount dos documentos que possuem ?timeLimit com valor 32, utiliza-se com a operação
+
+SELECT 2 *problemId acceptedCount WHERE ?timeLimit 32
+retornando
+
+p3 5432
+p4 3210
+Nessa pesquisa foi utilizado o atributo ?timeLimit como parâmetro de busca. Como ?timeLimit é um atributo indexado, basta procurar na BST de ?timeLimit quais os documentos que possuem valor 32. Para cada um dos documentos encontrados na travessia pela BST, deve-se acessar o atributos problemId e acceptedCount do objeto e imprimir seu valor. Lembrando que esta travessia deve ser feita em pré-ordem.
+
+Para remover da coleção o documento cujo !problemName possui valor Subtrair, usa-se a operação
+
+DELETE !problemName Multiplicar
+Para deletar um documento era necessário um parâmetro de busca que fosse único. Neste caso, o nós com chave Subtrair foi removido da BST do atributo !problemName. As referências a esse documento também devem ser removidas das BSTs dos atributos indexados.
+
+Ao fim de todas essas operações a coleção se encontra no seguinte estado:
+
+----------------------------------------------------------
+| *problemId | !problemName | ?timeLimit | acceptedCount |
+----------------------------------------------------------
+| p1         | Somar        | 1          | 9876          |
+----------------------------------------------------------
+| p2         | Subtrair     | 1          | 7654          |
+----------------------------------------------------------
+| p4         | Dividir      | 32         | 3210          |
+----------------------------------------------------------
+
+INPUT:
+A primeira linha da entrada está no formato
+
+N attr1 attr2 … attrN
+onde N indica a quantidade de atributos da coleção e o nome dos N atributos. Um dos N atributos começa com *, indicando que este é o atributo que funciona como identificador único na coleção. Os que começam com ! são atributos cujos valores devem ser únicos dentre todos os documentos da coleção. Os outros atributos indexados devem começar com ?.
+
+As próximas linhas são comandos do tipo SELECT, INSERT, e/ou DELETE no formato especificado acima. Todos os comando são válidos na ordem que estão dispostos na entrada.
+
+O valor de todos os atributos deve ser tratado como uma string de no máximo 255 caracteres. Já as linhas de comando não ultrapassam 1e5 caracteres.
+
+OUTPUT:
+A cada comando SELECT da entrada deve ser impressa uma linha para cada documento que respeita a condição de busca com os atributos desse documento, especificados no comando, separados por espaço. Os documentos devem ser visitados em pré-ordem na BST do atributo usado para a busca. Valores repetidos devem ser inseridos à direita na BST e portanto, na remoção de um nó com dois filhos, ele deve ser substituído pelo seu sucessor, ou seja, o elemento mínimo da subárvore à direita. Os atributos indefinidos devem ser indicados com o caractere ?. Ao final da saída de cada SELECT deve ser impressa uma linha em branco.

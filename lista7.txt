@@ -1,0 +1,30 @@
+Considere um jogo no qual os jogadores se deslocam por um cubo de dimensões M x N x P onde cada célula é dada por coordenadas (I,J,K).
+
+
+
+Cada célula está associada a uma pontuação que pode ser positiva ou negativa e o objetivo é precorrer um caminho de uma célula de origem, que varia conforme o jogador, até uma célula de destino única, obtendo a maior pontuação possível, sendo a pontuação dada pela soma das pontuações das células no percurso (incluindo origem e destino). Nesse jogo, estando na célula (I,J,K), um jogador só pode mover-se para três células vizinhas: (I-1, J, K), (I,J+1, K) e (I,J,K+1).
+
+INPUT:
+A primeira linha contém três inteiros, que representam as dimensões da array.
+
+M N S
+A próxima linha contém três inteiros, representando o destino do jogo
+
+Fi Fj Fk
+seguem M*N*S linhas, cada uma contendo um inteiro representado a pontuação de uma célula (I,J,K), considerando a ordem "para cada I, para cada J, para cada K".
+
+Segue-se uma linha com um inteiro P, representado o número de jogadores
+
+P
+Por fim seguem-se P linhas, cada uma contendo três inteiros,
+
+I J K
+representando a origem de cada jogador.
+
+OUTPUT:
+Para cada uma das últimas P linhas da entrada
+
+I J K
+deve-se imprimir em uma única linha com o valor da pontuação máxima que o jogador pode alcançar partindo da célula (I,J,K) até o destino (Fi, Fj, Fk).
+
+Será sempre possível ir da origem até o destino.

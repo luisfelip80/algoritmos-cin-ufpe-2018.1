@@ -1,0 +1,68 @@
+Uma empresa de city tour disponibiliza várias linhas de passeios, partindo de diversos pontos da cidade. Como a cidade é muito cheia de atrações, os ônibus fazem paradas em estações numeradas 0,1,2,... Em algumas dessas estações os ônibus fazem apenas paradas momentâneas para que os passageiros possam apreciar a paisagem e os monumentos sem descer do ônibus enquanto que, em outras estações, chamadas estações terminais, eles podem embarcar ou desembarcar. No belo encarte colorido da empresa, é possível identificar claramente as diferentes linhas através de cores diferentes e também distinguir os terminais das paradas temporárias por símbolos diferentes.
+
+Entretanto, uma observação mais cuidadosa revela que o turista pode identificar quais estações são terminais pelo fato de que, nos terminais, ou a linha começa/termina, ou há diferentes possibilidades de escolha sobre o caminho seguir, ao passo que, nas paradas intermédias, não há. Uma linha é definida por um conjunto de estações (paradas e terminais) que podem ser alcançadas umas a partir das outras, em qualquer sentido.
+
+Por exemplo, no plano a seguir, temos duas linhas: a linha vermelha com as estações de 0 a 23, e a linha azul com as estações 24 a 42. Na linha vermelha, os terminais são as estações 1, 3, 4, 7, 9, 10 e 20, ao passo que as demais são apenas paradas. Então, por exemplo, uma vez embarcando no terminal 1, o turista tem opção de seguir na direção das paradas 0,2, ou 14. Se seguir, por exemplo, na direção da 14, ele só poderá desembarcar novamente depois na estação 4.
+
+     14---15---16---17                            
+     |              |
+     |              |
+0----1----2----3----4----5----6
+|              |              |
+|              |              |
+13---12---11---10---9----8----7----23
+                    |         |    |
+                    |         |    |
+          20---19---18        21---22
+                    
+
+24---25                        36---37---38
+|    |                         |
+|    |                         |
+26---27---30---32---33---34---35
+|         |         |    |
+|         |         |    |
+28---29---31        39   42
+                    |    |
+                    |    |
+                    40---41
+O nosso objetivo será, entre outras coisas, calcular as rotas mínimas entre terminais das diferentes linhas.
+
+INPUT:
+A entrada será constituída de vários casos, numerados 0,1,2,... cada um correspondendo a um plano simplificado das rotas de city sightseeing.
+
+Cada caso está organizado da seguinte forma:
+
+N M
+u1 v1 d1
+u2 v2 d2
+...
+uM vM dM
+onde:
+
+N = número total de estações, sejam paradas ou terminais, englobando todas as linhas (no exemplo da descrição N=43).
+M = número total de conexões (bidirecionais) entre estações "vizinhas" (no exemplo da descrição, M=48)
+uj vj = indica uma conexão entre as estações uj e vj, para 0<=uj<vj<N.
+dj = indica a distância entre as estações consecutivas uj e vj, para 0<=uj<vj<N.
+Após cada caso, há uma linha em branco.
+
+OUTPUT:
+Para cada caso do arquivo de entrada, deve ser impressa uma saída correspondente na forma:
+
+caso C 
+D[0][0] D[0][1] ... D[0][T[0]]
+D[1][0] D[1][1] ... D[1][T[1]]
+...
+
+D[L-1][0] D[L-1][1] ... D[L-1][T[L]-1]
+onde
+
+C = 0,1,2,3,... é número do caso
+L = número de linhas de ônibus do caso
+T[j] = número de terminais da linha j
+D[l][t] = distância mínima a partir do primeiro terminal da linha l até o t-ésimo terminal dessa linha.
+
+NOTAS:
+Cada linha tem pelo menos duas estações e pelo menos uma das estações é terminal.
+Numa mesma linha, os terminais são ordenados de acordo com seu número: o primeiro terminal é aquele de menor número, o segundo possui o segundo menor número e assim sucessivamente)
+As linhas são ordenadas pelo número do seu menor terminal (não necessariamente a menor estação), ou seja, a linha 0 é a que possui o menor terminal, a linha 1 é aquela que contém o menor terminal que não está na linha 0, e assim sucessivamente.

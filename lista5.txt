@@ -1,0 +1,63 @@
+No Jogo de Hex, inventado pelo Matemático John Nash, temos um tabuleiro trapezoidal constituído por NxN casas hexagonais (N linhas numeradas, de cima pra baixo, de 0 a N-1, e N colunas numeradas, da esquerda para a direita, de 0 a N-1). O jogo é disputado por dois oponentes, B e W, cada um dos quais põe pedras pretas (Black) e brancas (White), respectivamente, de maneira alternada, em casas vazias. O jogador B vence se formar primeiro um caminho contínuo da ESQUERDA para a DIREITA. Já o objetivo do jogador W, é formar primeiro um caminho contínuo de CIMA para BAIXO. Na figura abaixo, temos uma partida num tabuleiro 10x10 vencida por W.
+
+                      CIMA
+
+     0   1   2   3   4   5   6   7   8   9                          
+    / \ / \ / \ / \ / \ / \ / \ / \ / \ / \                      (W)hite
+ 0 |   |   |   |   | W |   |   |   |   |   |                       
+    \ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \                      ^
+   1 |   |   |   |   | W |   |   |   |   |   |                     |
+      \ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \                    |
+     2 |   |   |   |   | W |   |   |   |   |   |             <-----+----->  (B)lack
+        \ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \                  |
+       3 |   | B | B |   | W | W | W | W |   |   |                 |
+          \ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \                v
+         4 | B |   | B | B | B | B | B | W |   |   |
+            \ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \
+ ESQUERDA  5 |   |   |   |   |   |   | B | W |   |   |  DIREITA 
+              \ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \
+             6 |   |   |   |   |   |   | B | W |   |   |
+                \ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \
+               7 |   |   |   |   |   |   | B | W |   |   |
+                  \ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \
+                 8 |   |   |   |   |   |   | B | W |   |   |
+                    \ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \
+                   9 |   |   |   |   |   |   | B | W |   |   |
+                      \ / \ / \ / \ / \ / \ / \ / \ / \ / \ /  
+                                   
+                                      BAIXO
+Jonh Nash provou que Hex é um jogo determinado, ou seja, não pode haver empate. Neste exercício, o objetivo é determinar quem venceu a partida a partir das jogadas.
+
+INPUT:
+entrada é constituída por K casos 0..K-1, cada um correspondendo a uma partida de Hex.
+
+Cada caso possui a forma
+
+N
+S
+R0 C0
+R1 C1
+R2 C2
+...
+RM  CM
+// linha em branco
+onde
+
+N = altura = largura do tabuleiro
+S = B ou W, quem inicia o jogo
+Rj Cj = posições (Linha e Coluna) j-ésima jogada de maneira alternada (j=0 é a primeira jogada de S, j=1 a primeira jogada do oponente, e assim por diante)
+
+IMPORTANTE:
+
+Para não ficar óbvio quem venceu, M será sempre ímpar, ou seja mesmo que o primeiro jogador vença, o oponente terá direito a colocar mais uma última pedra.
+0<N<=500
+
+OUTPUT:
+Para cada caso C=0..K-1 na entrada, o programa deve imprimir
+
+caso C: V A
+// linha em branco 
+onde
+
+V = B ou W é o jogador vencedor da partida
+A = 'Área' do caminho vencedor, ou seja, número total de pedras 'vizinhas' do caminho vencedor. No exemplo do enunciado, a área do caminho vencedor de W é 13.

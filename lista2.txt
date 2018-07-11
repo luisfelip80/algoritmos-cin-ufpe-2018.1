@@ -1,0 +1,125 @@
+Em aplicações de processamento de texto, é comum termos uma função para procurar as ocorrências exatas de uma palavra (substring) P = p[0]..p[M-1] de comprimento M, num texto T = t[0]..t[N-1] de comprimento N > M. Por exemplo, a palavra
+
+P = "deseja"
+ocorre no texto
+
+T = "Cada um cumpre o destino que lhe cumpre. E deseja o que deseja. Nem cumpre o que deseja, nem deseja o que cumpre."
+nas posições E(P, T) = [43, 56, 81, 93], ou seja, em apenas quatro posições da 108 possíveis.
+
+O algoritmo força-bruta consiste em comparar P, letra a letra, com as substrings (janelas) de T de comprimento M iniciadas em cada posição i = 0..N-M. Esse algoritmo requer O(NM) comparações no pior caso (e.g. T = aaa..aa e P = aaa..ab).
+
+Para acelerar a busca, podemos pré-processar T para construir uma tabela com todas as ocorrências das substrings de um dado comprimento K que ocorrem no texto, chamados Kmers.
+
+Por exemplo, a tabela do texto acima ficaria da seguinte forma para K = 2.
+
+" E": [40]
+" N": [63]
+" c": [7, 32, 67, 105]
+" d": [16, 42, 55, 80, 92]
+" l": [28]
+" n": [88]
+" o": [14, 49, 74, 99]
+" q": [24, 51, 76, 101]
+" u": [4]
+", ": [87]
+". ": [39, 62]
+"Ca": [0]
+"E ": [41]
+"Ne": [64]
+"a ": [3, 48, 98]
+"a,": [86]
+"a.": [61]
+"ad": [1]
+"cu": [8, 33, 68, 106]
+"da": [2]
+"de": [17, 43, 56, 81, 93]
+"e ": [13, 27, 31, 54, 73, 79, 104]
+"e.": [38]
+"ej": [46, 59, 84, 96]
+"em": [65, 90]
+"es": [18, 44, 57, 82, 94]
+"he": [30]
+"in": [21]
+"ja": [47, 60, 85, 97]
+"lh": [29]
+"m ": [6, 66, 91]
+"mp": [10, 35, 70, 108]
+"ne": [89]
+"no": [22]
+"o ": [15, 23, 50, 75, 100]
+"pr": [11, 36, 71, 109]
+"qu": [25, 52, 77, 102]
+"re": [12, 37, 72, 110]
+"se": [45, 58, 83, 95]
+"st": [19]
+"ti": [20]
+"ue": [26, 53, 78, 103]
+"um": [5, 9, 34, 69, 107]
+Portanto, ao procurar a palavra P = "deseja" no texto, inicialmente consultamos a tabela para descobrir que o prefixo "de" só ocorre nas posições [17, 43, 56, 81, 93] e, portanto, só precisamos verificar individualmente essas posições, comparando o sufixo "seja" com as subcadeias de tamanho M - K = 4 iniciadas nas posições 19 = 17 + 2, 45 = 43 + 2, …, 95 = 93 + 2. Após a verificação, constata-se que a palavra só ocorre nas posições [43, 56, 81, 93].
+
+O objetivo deste exercício é implementar essa estratégia.
+
+A tabela de ocorrências dos Kmers deve ser implementada como uma hashtable fechada com sondagem linear e função de dispersão
+
+h(C, j) = (h0(C) + j) mod Q
+onde
+
+C é a chave numérica a ser mapeada
+j >= 0 é o número da tentativa (sondagem)
+Q é um inteiro ímpar correspondente ao tamanho (capacidade) da hashtable
+h0(C) = C mod Q é a função de dispersão inicial
+Imediatamente antes de qualquer nova inserção, deve-se verificar o fator de carga e, caso este seja igual ou superior a um valor limite 0.5, o tamanho da tabela deve ser atualizado para 2 * Q + 1 e os elementos redistribuídos (rehashing).
+
+A hashtable deve armazenar cada Kmer X = x[0]..x[K-1] que ocorre no texto juntamente com as posições onde ocorre. Os Kmers devem ser inseridos por ordem de ocorrência no texto. Ou seja, no exemplo acima, a ordem seria "Ca", "ad", "da", "a ", …,"re", "e.". Para acessar a posição da hashtable contendo o Kmer X, a função de dispersão deve ser aplicada à chave numérica correspondente a X. Essa chave C equivale ao valor numérico de X quando interpretado como um numeral escrito em base B, onde B é o tamanho do alfabeto, calculado conforme:
+
+C = 0
+para i = 0..K-1 
+    C = B * C + X[i]
+Por exemplo, se o alfabeto for [a=0, b=1, c=2, d=3], B = 4 e P = cada = 2030(4) = 140(10), teremos:
+
+início:  C =    0
+ i = 0:  C =    0 * 4 + c                            =   2
+ i = 1:  C =   (0 * 4 + c) * 4 + a                   =   8
+ i = 2:  C =  ((0 * 4 + c) * 4 + a) * 4 + d          =  35
+ i = 3:  C = (((0 * 4 + c) * 4 + a) * 4 + d) * 4 + a = 140
+
+INPUT:
+Inicialmente temos uma linha com dois inteiros
+
+K Q
+onde:
+
+K indica o tamanho dos Kmers
+Q é o tamanho inicial da hashtable
+Em seguida temos uma linha
+
+$TXT Y
+indicando o início do texto. As Y linhas seguintes contêm o texto sobre o qual ocorrerão as pesquisas.
+
+Logo após o texto, temos uma linha
+
+$CONSULTAS W
+onde W indica o número de palavras a serem procuradas no texto.
+
+Seguem-se W linhas, cada uma contendo uma string S.
+
+NOTAS:
+As quebras de linha no texto contam como um caractere (\n).
+A quebra de linha ao final de cada uma das W últimas linhas com as strings a serem pesquisadas não faz parte da palavra nela contida, porém os espaços em branco da linha fazem parte da string a ser pesquisada.
+A chave numérica C deve ser armazenada em um inteiro de 32 bits sem sinal. Devido ao overflow na operação C = B * C + X[i], usar outro tipo de dados pode resultar em valores diferentes. Na linguagem C use o tipo uint32_t definido em stdint.h.
+O texto e o padrão estão escritos em ASCII (1 byte, tamanho do alfabeto B = 128). O valor numérico de cada caractere é dado pelo valor do byte correspondente:
+
+OUTPUT:
+Para cada string pesquisada Pj (j = 0..W-1), imprimir uma linha
+
+j: E(Pj,T)
+onde E(Pj,T) corresponde à lista ordenada das posições de Pj no texto T separadas por espaço.
+
+Ao final deve ser impressa uma linha com três inteiros
+
+S Z R
+onde:
+
+S é o número de Kmers na hashtable
+Z é a capacidade final da hashtable
+R é o tamanho da maior sequência de posições consecutivas ocupadas da hashtable

@@ -1,0 +1,49 @@
+Um determinado sistema contém um que sensor obtem leituras de um sinal que são discretizadas e normalizadas em valores inteiros não-negativos
+
+V[0], V[1], V[2],....
+A qualquer altura, o sistema pode precisar acionar rapidamente alguns atuadores cujas ações dependem de três informações: o valor mínimo, o valor máximo e a mediana da amostra de leituras. O sistema também pode ser "zerado" a qualquer momento e começar a coleta de uma nova amostra de leituras.
+
+Para atender a essa aplicação, o engenheiro responsável precisa desenvolver uma estrutura de dados correspondente a uma coleção dinâmica de inteiros não-negativos munida das seguintes operações:
+
+ADD V : adiciona o valor V e retorna três inteiros correspondentes o valor mínimo, a mediana e ao valor máximo após a inserção, nesta ordem
+MIN : retorna o valor mínimo da coleção, se houver, ou -1 caso a coleção esteja vazia
+MAX : retorna o valor máximo da coleção, se houver, ou -1 caso a coleção esteja vazia
+MED : retorna a mediana dos valores na coleção, se houver, ou -1 caso a coleção esteja vazia (Obs.: a mediana de um coleção de elementos ordenados A[0],..,A[N-1] é definido como o elemento A[floor(N/2)]).
+RES : reinicia a coleção (apaga todos os valores) e retorna o número de elementos antes da reinicialização
+Como é preciso que o sistema responda rapidamente, as operações MIN, MAX e MED devem ser realizadas em tempo constante. Já a operação ADD pode gastar, no máximo, tempo logaritmico no tamanho da amostra. Felizmente, o engenheiro lembra-se bem das aulas de algoritmos sobre heaps binárias...
+
+INPUT:
+A entrada é constituida de várias linhas, cada uma correspondendo a uma das operação dentre as descritas acima, podendo portanto ser na forma
+
+ADD V
+MIN
+MAX
+MED
+RES
+
+OUTPUT:
+Para cada operação no arquivo de entrada, imprimir uma linha com a saída correspondende
+
+ADD V : imprime
+X Y Z
+
+onde X,Y,Z correspondem, respectivamente, ao valor mínimo, a mediana e ao valor máximo após a inserção
+
+MIN : imprime
+X
+
+onde X é valor mínimo da coleção, se houver, ou -1 caso a coleção esteja vazia
+
+MAX : imprime
+Z
+
+onde Z é o valor máximo da coleção, se houver, ou -1 caso a coleção esteja vazia
+
+MED : imprime
+Y
+
+onde Y é a mediana dos valores na coleção, se houver, ou -1 caso a coleção esteja vazia
+
+RES : imprime
+S 
+onde S é o número de elementos antes da reinicialização

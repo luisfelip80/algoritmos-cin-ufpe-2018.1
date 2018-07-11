@@ -1,0 +1,26 @@
+Pedro é um programador que adora música e sentiu a necessidade de criar o seu próprio reprodutor de música, já que nenhum o deixou satisfeito.
+
+O seu reprodutor de música possui os seguintes comandos:
+
+ADD PLAYLIST SONG, adiciona a música SONG ao final da lista de reprodução PLAYLIST
+DEL PLAYLIST SONG, remove a música SONG da lista de reprodução PLAYLIST
+SWP PLAYLIST SONG1 SONG2, permuta a música SONG1 com a música SONG2 na lista de reprodução PLAYLIST
+PLS SONG, adiciona a música SONG ao final da fila de reprodução e a reproduz se a fila estava anteriormente vazia
+PLP PLAYLIST, limpa a fila de reprodução, adiciona cada uma das músicas da lista de reprodução, em seu estado atual, à fila de reprodução, reproduzindo sua primeira música
+NXT, reproduz a próxima música na fila de reprodução
+PRV, reproduz a música anterior na fila de reprodução
+CLR, limpa a fila de reprodução
+INF, imprime qual o nome da música sendo reproduzida no momento
+No comando ADD, a playlist deve ser criada caso não exista. É possível que a playlist ocasionalmente fique vazia, sem nenhuma música.
+
+O comando NXT pode resultar em uma fila de reprodução vazia, onde nenhuma música estará sendo reproduzida. Nesses casos deve-se manter o histórico de reprodução.
+
+Nunca será executado um comando NXT com a fila de reprodução vazia, ou um comando PRV sem histórico de reprodução.
+
+É garantido que todos os comandos estão dispostos em uma ordem válida.
+
+INPUT:
+A entrada consiste em um inteiro N, seguido de N linhas, cada uma contendo um comando do reprodutor de música.
+
+OUTPUT:
+Para cada comando INF, deve-se imprimir uma linha contendo o nome da música que está sendo reproduzida. Caso não haja música sendo reproduzida, deve-se imprimir UNKNOWN.
